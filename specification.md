@@ -128,94 +128,85 @@
 
 ### Market Functionality
 
-- `submitBid(string assetURI, amount uint256, address bidder)`
-    - send ETH to the contract
-    - create new `Bid` 
-        - store `amount`, `msg.sender`
-        - set `live` to `TRUE`
-    - store in `_assetBidders`
-        - set `tokenId` equal to `_tokenIdTracker`
-        - increment `_tokenIdTracker`
-        - store new `Bid` as value
-    - store in `_tokenURIs`
-        - store `tokenId` as key
-        - store `assetURI` as value
+`submitBid(string assetURI, amount uint256, address bidder)`
+- send ETH to the contract
+- create new `Bid` 
+    - store `amount`, `msg.sender`
+    - set `live` to `TRUE`
+- store in `_assetBidders`
+    - set `tokenId` equal to `_tokenIdTracker`
+    - increment `_tokenIdTracker`
+    - store `bidder` as `address`
+    - store new `Bid` as value
+- store in `assets`
+    - create new `Asset` using `tokenId` as key
+    - store `assetURI` as value
+    - store contract `address` as `owner`
 
-- `removeBid(uint8 tokenId, address bidder)`
-    - find bid using `tokenId` in `_assetBidders`
-    - refund bid `amount` to `bidder`
-    - delete bid
-        - set bid equal to `0`
+`removeBid(uint8 tokenId, address bidder)`
+- find bid using `tokenId` in `_assetBidders`
+- refund bid `amount` to `bidder`
+- delete bid
+    - set bid equal to `0`
 
-- `acceptBid(uint8 tokenId, address bidder)`
-    - call `isOwner()` with `msg.sender` and `tokenId`
-    - if false:
-        - query `assets` to return the `assetURI` 
-        - call `_verifyOwnership()` with `assetURI`
-        - call `isOwner()` with `msg.sender` and `tokenId`
-        - if false, `err ("Only an owner can accept bids for this asset)`
-    - else:
-        - call `_mintAndTransfer()`
-        - sets `Live` to `FALSE` on `_assetBidders` for this `tokenId` and `address`
-        - new token is minted and transferred to bidder
+`acceptBid(uint8 tokenId, address bidder)`
+- call `isOwner()` with `msg.sender` and `tokenId`
+- if false:
+    - `err ("Only an owner can accept bids for this asset)`
+- else:
+    - call `_mintAndTransfer()` with `tokenId` and `bidder` address
+    - set `Live` to `FALSE` on `_assetBidders` for this `tokenId` and `bidder` address
 
-- `rejectBid(uint8 tokenId)`
-    - function calls `isOwner()` with `msg.sender` and `tokenId`
-    - if false:
-        - querys `assets` to return the `assetURI` 
-        - function calls `_verifyOwnership()` with the `assetURI`
-        - function calls `isOwner()` with `msg.sender` and `tokenId`
-        - if false, `err ("Only an owner can reject bids for this asset)`
-    - else: 
-        - sets `Live` to `FALSE` on `_assetBidders` for this `tokenId` and `address`
-        - refund any other bids
+`rejectBid(uint8 tokenId)`
+- function calls `isOwner()` with `msg.sender` and `tokenId`
+- if false:
+    - `err ("Only an owner can reject bids for this asset)`
+- else: 
+    - set `Live` to `FALSE` on `_assetBidders` for this `tokenId` and  `bidder` address
+    - refund bid `amount` for this `tokenId` and `bidder` address
 
-- `rejectAllBids(uint8 tokenId)`
-    - function calls `isOwner()` with `msg.sender` and `tokenId`
-    - if false:
-        - function calls `_verifyOwnership()` with the `assetURI`
-        - function calls `isOwner()` with `msg.sender` and `tokenId`
-        - if false, `err ("Only an owner can reject bids for this asset)`
-    - else: 
-        - sets `Live` to `FALSE` on all `Bids` in `_assetBidders` for this `tokenId`
-        - refunds all bids
+`rejectAllBids(uint8 tokenId)`
+- function calls `isOwner()` with `msg.sender` and `tokenId`
+- if false:
+    - `err ("Only an owner can reject bids for this asset)`
+- else: 
+    - set `Live` to `FALSE` on all `Bids` in `_assetBidders` for this `tokenId`
+    - refund all bids for this `tokenId`
 
 
 ### Asset Functionality
 
-- `generateOwnershipHash(string assetURI, address owner)`
-    - concatenate `assetURI` and `msg.sender`'s `address` then hash
-    - sign hash with `msg.sender`'s private key
-    - store hash in `ownership` as `ownershipHash` against the `assetURI` and `msg.sender`'s address 
+`generateOwnershipHash(string assetURI, address owner)`
+- concatenate `assetURI` and `msg.sender`'s `address` then hash
+- sign hash with `msg.sender`'s private key
+- store hash in `ownership` as `ownershipHash` against the `assetURI` and `msg.sender`'s address 
 
-- `isOwner(uint8 tokenId, address owner) public view returns (bool)`
-    - search `ownership` with `tokenId`
-    - compare returned `address` with `owner`
-    - return bool
+`isOwner(uint8 tokenId, address owner) public view returns (bool)`
+- search `ownership` with `tokenId`
+- compare returned `address` with `owner`
+- return `bool`
 
 
 ## Private Functions
 
-- `_mintAndTransfer(uint8 tokenId)`
-    - mints ERC721 token and sends it to the successful bidder
-
-- `_verifyOwnership(string assetURI, address owner)`
-    - `assetURI` is used to query `ownership` and return `ownershipHash`
-    - if `ownershipHash` exists:
-        - send transaction to Ownership Oracle with `assetURI` and `ownershipHash`
-        - if response is `TRUE`:
-            - retrieve `tokenId` from `_tokenURIs`
-            - update `assets` with `owner`
-        else:
-            - return `"Not an Owner"`    
-    else:
-        - return `"No ownership hash found"`
+`_verifyOwnership(string assetURI, address owner)`
+- `assetURI` is used to query `ownership` and return `ownershipHash`
+- if `ownershipHash` exists:
+    - send transaction to Ownership Oracle with `assetURI` and `ownershipHash`
+    - if response is `TRUE`:
+        - retrieve `tokenId` from `_tokenURIs`
+        - update `assets` with `owner`
+    - else:
+        - return `"Not an Owner"`    
+- else:
+    - return `"No ownership hash found"`
 
 
 ## External Services
 
-- Ownership Oracle
-    - Ownership oracle makes a request to the domain in the submitted `assetURI`
-    - The oracle downloads the returned file and attempts to match the ownership hash
-    - If the ownership hash is matched, returns `TRUE`
-    - If the ownership hash is not matched, returns `FALSE`
+`ownershipOracle` Service
+- transacton sent to oracle to initiate a request to the domain in the submitted `assetURI`
+- download returned file
+- parse file and stop once the ownership hash is matched
+- If the ownership hash is matched, return `TRUE`
+- If the ownership hash is not matched, return `FALSE`
