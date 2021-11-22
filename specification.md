@@ -37,40 +37,49 @@ Assets can be created by anyone *using the ACL protocol*.
 
 Assets are described by their ID, URI, and metadata.
 
-Examples include:
-    - image files
-        - the right to edit the source file
-    - music files
-        - the right to edit the source file
-    - video files
-        - the right to edit the source file
-    - website folders
-        - the right to edit the folders
-    - application packages
-        - the right to edit the application
-        - the right to call the functions
-        - the right to 
-    - media hosting websites
-        - the right to upload
-        - the right to edit the media
-        - the right to edit the media's metadata
-        - the right to 
-
-
 ## Ownership
 
 Ownership is a mapping from an asset to an address.
 
+Only one owner is permitted.
+
 An asset is mapped to an address once the address proves it is able to exercise the digital right it's attempting to claim as its property.
 
-The Ownership Oracle service verifies proof-of-ownership by searching the listed URI for data signed by the address in question
+Prospective owners can generate a unique hash or file using their signature from the ownership service
 
-The ownership mapping can only be written to by the Ownership Oracle. 
+The Ownership Oracle service verifies proof-of-ownership by searching the listed URI for the Ownership hash or file signed by the prospective owner's address. 
 
 ## Market
 
+Market is a collection of bids stored against an asset.
+
+Any user can submit a bid for any asset on the web directly to the network by submitting a valid asset.
+
+Users send the bid amount to the contract with their bid.
+
+Bids can only be accepted by an owner.
+
+Once a bid is accepted the amount is transferred to the owner, the token is minted and transferred to the bidder, and the owner is updated.
 
 
+## Examples
+
+### Websites
+- the right to edit the website
+- the right to control access
+
+### Interfaces
+- the right to edit the application
+- the right to access functions
+- the right to control access to functions
+
+### Hosted Media
+- the right to upload
+- the right to edit the media
+- the right to edit the media's metadata
+- the right to edit the media's source file
+- the right to write
+- the right to control access
 
 # Design
 
