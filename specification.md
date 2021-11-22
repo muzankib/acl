@@ -1,10 +1,10 @@
 # MVP Specification
 
-[] Bidder can submit a bid for uri in ETH
-[] Bidder can receive token upon accepted bid
+[ ] Bidder can submit a bid for asset in ETH
+[ ] Bidder can receive token upon accepted bid
 
-[] Owner can prove ownership of uri
-[] Owner can accept/reject bid for uri
+[ ] Owner can prove ownership of asset
+[ ] Owner can accept/reject bid for asset
 
 
 # User Journey
@@ -18,7 +18,7 @@
 4. Bidder submits Asset URI and bid in ETH to ACL
 
 ### Accept Journey
-1. Owner is notified of bid by third-party who receives tokens for relaying messages that result in successful sales
+1. Owner is notified of bid by third-party
 2. Owner reviews and accepts bid
 3. Owner proves ownership 
 4. Owner mints Asset token and transfers it to winning bidder
@@ -26,60 +26,78 @@
 # Core Concepts
 
 1. Asset
-2. Market
-3. Ownership
+2. Ownership
+3. Notification
+4. Market
 
 ## Asset
 
-Assets are digital property rights and their relationship to a resource or a set of resources.
+- Assets are digital property rights and their relationship to a resource or a set of resources.
 
-Assets can be created by anyone *using the ACL protocol*.
+- Assets can be created by anyone *using the ACL protocol*.
 
-Assets are described by their ID, URI, and metadata.
+- Assets are described by their ID, URI, and metadata.
+
+[TODO] Decide how metadata will be managed, open or controlled?
 
 ## Ownership
 
-Ownership is a mapping from an asset to an address.
+- Ownership is a mapping from an asset to an address.
 
-Only one owner is permitted.
+- Only one owner is permitted.
 
-An asset is mapped to an address once the address proves it is able to exercise the digital right it's attempting to claim as its property.
+- An asset is mapped to an address once the address proves it is able to exercise the digital right it's attempting to claim as its property.
 
-Prospective owners can generate a unique hash or file using their signature from the ownership service
+- Prospective owners can generate a unique hash or file using their signature from the ownership service.
 
-The Ownership Oracle service verifies proof-of-ownership by searching the listed URI for the Ownership hash or file signed by the prospective owner's address. 
+- The Ownership Oracle service verifies proof-of-ownership by searching the listed URI for the Ownership hash or file signed by the prospective owner's address. 
+
+[TODO] Describe how ownership is proven for a set of example assets
+[TODO] Research proof-of-ownership oracles 
+
+## Notification
+
+- The protocol incentivises buyers to seek out and bid on valuable assets ahead of those asset owners entering the market.
+
+- Therefore, notification is the process by which owners are notified of bids on their assets.
+
+[TODO] Decide if the protocol incentivises notification and, if so, describe how 
 
 ## Market
 
-Market is a collection of bids stored against an asset.
+- Market is a collection of bids stored against an asset as a continuous auction.
 
-Any user can submit a bid for any asset on the web directly to the network by submitting a valid asset.
+- Any user can submit a bid for any asset on the web directly to the network.
 
-Users send the bid amount to the contract with their bid.
+- Users send the bid amount to the contract with their bid and a valid asset object.
 
-Bids can only be accepted by an owner.
+- Bids can only be accepted or rejected by an owner.
 
-Once a bid is accepted the amount is transferred to the owner, the token is minted and transferred to the bidder, and the owner is updated.
+- Once a bid is accepted, the amount is transferred to the owner, the token is minted and transferred to the bidder, and the owner is updated to the bidder.
 
+[TODO] Investigate auction designs where bids are collected for tokens before they are minted
 
 ## Examples
 
 ### Websites
 - the right to edit the website
-- the right to control access
+- the right to control access to the website
+- the right to manage website domain
 
-### Interfaces
+### Applications & Interfaces
 - the right to edit the application
-- the right to access functions
-- the right to control access to functions
+- the right to access application functions
+- the right to access application storage
+- the right to control access to application functions and/or storage
 
 ### Hosted Media
 - the right to upload
 - the right to edit the media
 - the right to edit the media's metadata
 - the right to edit the media's source file
-- the right to write
-- the right to control access
+- the right to write to the page where media is displayed
+- the right to control playback of media
+- the right to control access to the media
 
 # Design
 
@@ -105,7 +123,6 @@ Once a bid is accepted the amount is transferred to the owner, the token is mint
 
 //tracks ERC721 tokens minted
 - Counters.Counter private _tokenIdTracker;
-
 
 ## Functions
 
