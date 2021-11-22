@@ -23,6 +23,54 @@
 3. Owner proves ownership 
 4. Owner mints Asset token and transfers it to winning bidder
 
+# Core Concepts
+
+1. Asset
+2. Market
+3. Ownership
+
+## Asset
+
+Assets are digital property rights and their relationship to a resource or a set of resources.
+
+Assets can be created by anyone *using the ACL protocol*.
+
+Assets are described by their ID, URI, and metadata.
+
+Examples include:
+    - image files
+        - the right to edit the source file
+    - music files
+        - the right to edit the source file
+    - video files
+        - the right to edit the source file
+    - website folders
+        - the right to edit the folders
+    - application packages
+        - the right to edit the application
+        - the right to call the functions
+        - the right to 
+    - media hosting websites
+        - the right to upload
+        - the right to edit the media
+        - the right to edit the media's metadata
+        - the right to 
+
+
+## Ownership
+
+Ownership is a mapping from an asset to an address.
+
+An asset is mapped to an address once the address proves it is able to exercise the digital right it's attempting to claim as its property.
+
+The Ownership Oracle service verifies proof-of-ownership by searching the listed URI for data signed by the address in question
+
+The ownership mapping can only be written to by the Ownership Oracle. 
+
+## Market
+
+
+
 
 # Design
 
