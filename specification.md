@@ -1,9 +1,11 @@
 # MVP Specification
 
 [] Bidder can submit a bid for uri in ETH
+
 [] Bidder can receive token upon accepted bid
 
 [] Owner can prove ownership of uri
+
 [] Owner can accept/reject bid for uri
 
 
