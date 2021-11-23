@@ -1,27 +1,29 @@
 # MVP Specification
 
-[ ] Bidder can submit a bid for uri in ETH
+_Note: MVP will be constrained to Youtube videos for simplicity. A generalised design for claiming any asset on the web will follow._
+
+[ ] Bidder can submit a bid for youtube uri in ETH
 
 [ ] Bidder can receive token upon accepted bid
 
-[ ] Owner can prove ownership of uri
+[ ] Owner can prove ownership of youtube uri
 
-[ ] Owner can accept/reject bid for uri
+[ ] Owner can accept/reject bid for youtube uri
 
 # User Journey
 
-## Bidder
+![Ownership Claim Journey](/acl@2x.png?raw=true)
 
 ### Bid Journey
-1. Bidder identifies an asset they want to purchase
-2. Bidder copies Asset URI
+1. Bidder identifies a youtube video asset they want to purchase
+2. Bidder copies youtube video asset URI
 3. Bidder navigates to ACL
-4. Bidder submits Asset URI and bid in ETH to ACL
+4. Bidder submits URI and bid in ETH to ACL
 
 ### Accept Journey
 1. Owner is notified of bid by third-party
 2. Owner reviews and accepts bid
-3. Owner proves ownership 
+3. Owner proves ownership of youtube video by modifying description of video
 4. Owner mints Asset token and transfers it to winning bidder
 
 # Core Concepts
@@ -194,6 +196,8 @@
 - `assetURI` is used to query `ownership` and return `ownershipHash`
 - if `ownershipHash` exists:
     - send transaction to Ownership Oracle with `assetURI` and `ownershipHash`
+    - If the ownership hash is matched, return `TRUE`
+    - If the ownership hash is not matched, return `FALSE`
     - if response is `TRUE`:
         - retrieve `tokenId` from `_tokenURIs`
         - update `assets` with `owner`
@@ -206,8 +210,6 @@
 ## External Services
 
 `ownershipOracle` Service
-- transacton sent to oracle to initiate a request to the domain in the submitted `assetURI`
-- download returned file
-- parse file and stop once the ownership hash is matched
-- If the ownership hash is matched, return `TRUE`
-- If the ownership hash is not matched, return `FALSE`
+- transacton sent to chainlink getter oracle to initiate a request to the Youtube API with the videoId in the submitted `assetURI`
+- chainlink's jsonparser used to parse the description 
+- description is returned to contract
